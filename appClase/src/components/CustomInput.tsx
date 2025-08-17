@@ -5,8 +5,9 @@ import {
   Text,
   TextInput,
   View,
+  TouchableOpacity,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 type Props = {
   value: string;
@@ -24,6 +25,8 @@ export default function CustomInput({
 }: Props) {
   const isPasswordField = type === 'password';
   const [isSecureText, setIsSecureText] = useState(type === 'password');
+  const iconName = isSecureText ? 'visibility' : 'visibility-off';
+
   const keyBoardType: KeyboardTypeOptions =
     type === 'email'
       ? 'email-address'
@@ -36,23 +39,29 @@ export default function CustomInput({
   const getError = () => {
     if (required && !value) return 'El campo es obligatorio.';
     if (type === 'email' && !value.includes('@')) return 'Correo invalido.';
-    if (type === 'password' && value.length > 0 && value.length< 4)
+    if (type === 'password' && value.length > 0 && value.length < 4)
       return 'Contraseña debe ser mas fuerte.';
   };
   const error = getError();
   return (
     <View>
-      <View style={[styles.inputContainer,  error && styles.inputError]}>
+      <View style={[styles.inputContainer, error && styles.inputError]}>
         <TextInput
           style={styles.input}
           placeholder={title}
           value={value}
           onChangeText={onChange}
-          secureTextEntry={isSecureText}
+          secureTextEntry={isPasswordField ? isSecureText : false}
           keyboardType={keyBoardType}
         />
 
-        {isPasswordField && <Icon name="eye" size={20} />}
+        {isPasswordField && (
+          <TouchableOpacity
+            onPress={() => setIsSecureText(isSecure => !isSecure)}
+          >
+            <Icon name={iconName} size={20} />
+          </TouchableOpacity>
+        )}
       </View>
       <Text>{error}</Text>
     </View>
