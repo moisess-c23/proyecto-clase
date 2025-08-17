@@ -6,17 +6,21 @@ type props = {
   variant?: 'primary' | 'secondary' | 'tertiary';
 };
 
-export default function CustomButton(
-  { title, onPress, variant = 'primary' }: props) {
+export default function CustomButton({
+  title,
+  onPress,
+  variant = 'primary',
+}: props) {
+  const styles = getStyles(variant);
   return (
-    <TouchableOpacity onPress={onPress}>
-      <Text>{title}</Text>
+    <TouchableOpacity style = {styles.button} onPress={onPress}>
+      <Text style = {styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 }
 
 const getStyles = (variant: 'primary' | 'secondary' | 'tertiary') => {
-  StyleSheet.create({
+  return StyleSheet.create({
     button: {
       padding: 12,
       margin: 10,
